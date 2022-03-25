@@ -2,9 +2,11 @@ package com.restarant.backend.web.restapi;
 
 import com.restarant.backend.domain.FoodDetalls;
 import com.restarant.backend.repository.FoodDetallsRepository;
+import com.restarant.backend.service.dtoinput.FoodDetailDtoInput;
+import com.restarant.backend.service.ipm.FoodDetailServiceIpm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +20,16 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 @Transactional
+@CrossOrigin("*")
 public class FoodDetallsResource {
 
     private final Logger log = LoggerFactory.getLogger(FoodDetallsResource.class);
 
     private static final String ENTITY_NAME = "foodDetalls";
     private final FoodDetallsRepository foodDetallsRepository;
+
+    @Autowired
+    FoodDetailServiceIpm foodservice;
 
     public FoodDetallsResource(FoodDetallsRepository foodDetallsRepository) {
         this.foodDetallsRepository = foodDetallsRepository;
@@ -37,10 +43,10 @@ public class FoodDetallsResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/food-detalls")
-    public ResponseEntity<FoodDetalls> createFoodDetalls(@RequestBody FoodDetalls foodDetalls) throws URISyntaxException {
-        log.debug("REST request to save FoodDetalls : {}", foodDetalls);
-        FoodDetalls result = foodDetallsRepository.save(foodDetalls);
-        return ResponseEntity.created(new URI("/api/food-detalls/" + result.getId())).body(result);
+    public ResponseEntity<FoodDetalls> createFoodDetalls(@RequestBody FoodDetailDtoInput foodDetalls) throws URISyntaxException {
+        System.out.println(foodDetalls.toString());
+        FoodDetalls result = foodservice.create(foodDetalls);
+        return ResponseEntity.ok().body(result);
     }
 
     /**

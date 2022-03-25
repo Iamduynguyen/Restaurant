@@ -7,7 +7,9 @@ import com.restarant.backend.repository.FoodMediaRepository;
 import com.restarant.backend.repository.FoodRepository;
 import com.restarant.backend.service.FoodDetailService;
 import com.restarant.backend.service.dtoinput.FoodDetailDtoInput;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FoodDetailServiceIpm implements FoodDetailService {
     private final FoodRepository foodRepository;
     private final FoodDetallsRepository foodDetallsRepository;
@@ -24,6 +26,7 @@ public class FoodDetailServiceIpm implements FoodDetailService {
         FoodDetalls entity = convertToEntity(input);
         entity.setDeleteflag(1l);
         FoodDetalls rs = foodDetallsRepository.save(entity);
+        System.out.println(entity.toString());
         if (input.getFoodMedias()!=null){
             for (FoodMedia media : input.getFoodMedias()){
                 String x = media.getFoodurl();

@@ -4,8 +4,10 @@ import com.restarant.backend.domain.Food;
 import com.restarant.backend.repository.FoodRepository;
 import com.restarant.backend.service.Foodservice;
 import com.restarant.backend.service.dtoinput.FoodDtoInput;
+import com.restarant.backend.service.dtooutput.FoodOutDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 @Transactional
+@CrossOrigin("*")
 public class FoodResource {
 
     private final Logger log = LoggerFactory.getLogger(FoodResource.class);
@@ -76,9 +79,9 @@ public class FoodResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of foods in body.
      */
     @GetMapping("/foods")
-    public List<Food> getAllFoods() {
+    public ResponseEntity<?> getAllFoods(Pageable pageable) {
         log.debug("REST request to get all Foods");
-        return foodRepository.findAll();
+        return ResponseEntity.ok(foodservice.getAll(pageable).getContent());
     }
 
     /**
