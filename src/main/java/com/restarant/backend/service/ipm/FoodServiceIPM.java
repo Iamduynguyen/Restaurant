@@ -1,20 +1,24 @@
 package com.restarant.backend.service.ipm;
 
 import com.restarant.backend.domain.Food;
+import com.restarant.backend.domain.FoodDetalls;
 import com.restarant.backend.repository.CategoryRepository;
 import com.restarant.backend.repository.FoodDetallsRepository;
+import com.restarant.backend.repository.FoodMediaRepository;
 import com.restarant.backend.repository.FoodRepository;
 import com.restarant.backend.service.Foodservice;
 import com.restarant.backend.service.dtoinput.FoodDtoInput;
 import com.restarant.backend.service.dtooutput.FoodOutDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,11 +26,13 @@ public class FoodServiceIPM implements Foodservice {
     private final FoodRepository foodRepository;
     private final CategoryRepository categoryRepository;
     private final FoodDetallsRepository foodDetallsRepository;
+    private final FoodMediaRepository mediaRepository;
 
-    public FoodServiceIPM(FoodRepository foodRepository, CategoryRepository categoryRepository, FoodDetallsRepository foodDetallsRepository) {
+    public FoodServiceIPM(FoodRepository foodRepository, CategoryRepository categoryRepository, FoodDetallsRepository foodDetallsRepository, FoodMediaRepository mediaRepository) {
         this.foodRepository = foodRepository;
         this.categoryRepository = categoryRepository;
         this.foodDetallsRepository = foodDetallsRepository;
+        this.mediaRepository = mediaRepository;
     }
 
     @Override
@@ -62,7 +68,11 @@ public class FoodServiceIPM implements Foodservice {
         dto.setViews(entity.getViews());
         dto.setNotes(entity.getNotes());
         dto.setTitle(entity.getTitle());
-        dto.setFoodDetalls(foodDetallsRepository.getByFoodId(dto.getId()));
+        List<FoodDetalls> rs = foodDetallsRepository.getByFoodId(dto.getId());
+        for (FoodDetalls x:rs){
+            x.setFoodMedias(mediaRepository.getByfoodId(x.getId()));
+        }
+        dto.setFoodDetalls(rs);
         return dto;
     }
 }

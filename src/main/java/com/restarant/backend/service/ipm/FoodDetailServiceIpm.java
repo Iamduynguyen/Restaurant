@@ -41,7 +41,7 @@ public class FoodDetailServiceIpm implements FoodDetailService {
                 mediaRepository.save(media);
             }
         }
-        return null;
+        return rs;
     }
 
     FoodDetalls convertToEntity(FoodDetailDtoInput input){

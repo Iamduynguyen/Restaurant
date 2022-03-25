@@ -35,7 +35,7 @@ public class FoodDetalls implements Serializable {
     @Column(name = "deleteflag")
     private Long deleteflag;
 
-    @OneToMany(mappedBy = "foodDetalls")
+    @OneToMany(mappedBy = "foodDetalls",fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "foodDetalls" }, allowSetters = true)
     private Set<FoodMedia> foodMedias = new HashSet<>();
 

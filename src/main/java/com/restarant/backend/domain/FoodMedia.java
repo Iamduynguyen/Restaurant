@@ -29,7 +29,7 @@ public class FoodMedia implements Serializable {
     @Column(name = "deleteflag")
     private Long deleteflag;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "foodMedias", "orderDetails", "food" }, allowSetters = true)
     private FoodDetalls foodDetalls;
 
